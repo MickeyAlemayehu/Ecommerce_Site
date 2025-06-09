@@ -6,7 +6,6 @@ include 'header.php';
 
 if (!isset($_GET['id'])) {
     echo "<p>Product ID missing. <a href='dashboard.php'>Back to dashboard</a></p>";
-    include '../includes/footer.php';
     exit;
 }
 
@@ -23,7 +22,6 @@ $stmt->close();
 
 if (!$product) {
     echo "<p>Product not found. <a href='dashboard.php'>Back to dashboard</a></p>";
-    include '../includes/footer.php';
     exit;
 }
 
@@ -59,12 +57,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($errors)) {
-        $stmt = $conn->prepare("UPDATE products SET name = ?, description = ?, price = ?, image = ?, category = ? WHERE id = ?");
+        $stmt = $conn->prepare("UPDATE products SET name = ?, description = ?, price = ?, image = ?, Category = ? WHERE id = ?");
         $stmt->bind_param("ssdssi", $name, $description, $price, $image_name, $category, $id);
         if ($stmt->execute()) {
             echo "<p>Product updated successfully. <a href='dashboard.php'>Back to dashboard</a></p>";
             $stmt->close();
-            include '../includes/footer.php';
             exit;
         } else {
             $errors[] = "Error updating product.";
@@ -74,41 +71,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<h2>Edit Product</h2>
+<div class="edit-product-container">
+    <h2>Edit Product</h2>
 
-<?php if ($errors): ?>
-    <div style="color:red;">
-        <ul>
-            <?php foreach ($errors as $e): ?>
-                <li><?= htmlspecialchars($e) ?></li>
-            <?php endforeach; ?>
-        </ul>
-    </div>
-<?php endif; ?>
+    <?php if ($errors): ?>
+        <div class="edit-product-errors">
+            <ul>
+                <?php foreach ($errors as $e): ?>
+                    <li><?= htmlspecialchars($e) ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
 
-<form d="productForm" method="post" action="edit_product.php?id=<?= $id ?>" enctype="multipart/form-data">
-    <label>Name:<br>
-        <input type="text" name="name" value="<?= htmlspecialchars($_POST['name'] ?? $product['name']) ?>" required>
-    </label><br><br>
+    <form id="productForm" class="edit-product-form" method="post" action="edit_product.php?id=<?= $id ?>" enctype="multipart/form-data">
+        <label>Name:
+            <input type="text" name="name" value="<?= htmlspecialchars($_POST['name'] ?? $product['name']) ?>" required>
+        </label>
 
-    <label>Description:<br>
-        <textarea name="description"><?= htmlspecialchars($_POST['description'] ?? $product['description']) ?></textarea>
-    </label><br><br>
+        <label>Description:
+            <textarea name="description"><?= htmlspecialchars($_POST['description'] ?? $product['description']) ?></textarea>
+        </label>
 
-    <label>Price:<br>
-        <input type="number" step="0.01" name="price" value="<?= htmlspecialchars($_POST['price'] ?? $product['price']) ?>" required>
-    </label><br><br>
+        <label>Price:
+            <input type="number" step="0.01" name="price" value="<?= htmlspecialchars($_POST['price'] ?? $product['price']) ?>" required>
+        </label>
 
-    <label>Category:<br>
-        <input type="text" name="category" value="<?= htmlspecialchars($_POST['category'] ?? $product['Category']) ?>">
-    </label><br><br>
+        <label>Category:
+            <input type="text" name="category" value="<?= htmlspecialchars($_POST['category'] ?? $product['Category']) ?>">
+        </label>
 
-    <label>Current Image:<br>
-        <img src="../uploads/<?= htmlspecialchars($product['image']) ?>" alt="Product Image" style="max-width:150px;">
-    </label><br><br>
+        <label>Current Image:<br>
+            <img src="../uploads/<?= htmlspecialchars($product['image']) ?>" alt="Product Image">
+        </label>
 
-    <label>Change Image:<br>
-        <input type="file" name="image" accept="image/*">
-    </label><br><br>
+        <label>Change Image:
+            <input type="file" name="image" accept="image/*">
+        </label>
 
-    <button type="submit">Update Product</b
+        <button type="submit">Update Product</button>
+    </form>
+</div>
+
+

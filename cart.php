@@ -1,90 +1,156 @@
 <?php
 
+include 'includes/auth.php';
 include 'includes/db.php';
 include 'includes/header.php';
 
-// Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php?error=login_required");
-    exit;
-}
+require_login();
 
-// Initialize cart if not set
+// Initialize cart if it doesn't exist
 if (!isset($_SESSION['cart'])) {
-    $_SESSION['cart'] = [];
+    $_SESSION['cart'] = array();
 }
 
-// Handle "Add to Cart"
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
-    $id = intval($_POST['product_id']);
-    $qty = max(1, intval($_POST['quantity']));
-
-    if (isset($_SESSION['cart'][$id])) {
-        $_SESSION['cart'][$id] += $qty;
-    } else {
-        $_SESSION['cart'][$id] = $qty;
+// Process POST requests
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['add_to_cart'])) {
+        $product_id = $_POST['product_id'];
+        $quantity = $_POST['quantity'];
+        
+        // Add to cart
+        if (isset($_SESSION['cart'][$product_id])) {
+            $_SESSION['cart'][$product_id] += $quantity;
+        } else {
+            $_SESSION['cart'][$product_id] = $quantity;
+        }
+    } elseif (isset($_POST['update_cart'])) {
+        $product_id = $_POST['product_id'];
+        $quantity = $_POST['quantity'];
+        
+        if ($quantity > 0) {
+            $_SESSION['cart'][$product_id] = $quantity;
+        } else {
+            unset($_SESSION['cart'][$product_id]);
+        }
+    } elseif (isset($_POST['remove_item'])) {
+        $product_id = $_POST['product_id'];
+        unset($_SESSION['cart'][$product_id]);
     }
-
-    // Redirect to avoid form resubmission
-    header("Location: cart.php?added=1");
+    
+    // Redirect to prevent form resubmission
+    header('Location: cart.php');
     exit;
 }
 
-// Handle remove item
-if (isset($_GET['remove'])) {
-    $removeId = intval($_GET['remove']);
-    unset($_SESSION['cart'][$removeId]);
-    header("Location: cart.php?removed=1");
-    exit;
-}
+// Get cart items
+$cart_items = array();
+$total = 0;
 
-// Count items in cart
-$cartCount = isset($_SESSION['cart']) ? array_sum($_SESSION['cart']) : 0;
-?>
-
-<?php
-if (isset($_GET['added'])) {
-    echo "<p style='color: green;'>✅ Product added to cart!</p>";
-} elseif (isset($_GET['removed'])) {
-    echo "<p style='color: orange;'>🗑️ Item removed from cart.</p>";
-}
-
-// Display cart contents
-if (empty($_SESSION['cart'])) {
-    echo "<p>Your cart is empty.</p>";
-} else {
-    $ids = implode(',', array_keys($_SESSION['cart']));
-    $sql = "SELECT * FROM products WHERE id IN ($ids)";
+if (!empty($_SESSION['cart'])) {
+    $ids = array_keys($_SESSION['cart']);
+    $ids_string = implode(',', $ids);
+    $sql = "SELECT * FROM products WHERE id IN ($ids_string)";
     $result = $conn->query($sql);
-
-    $total = 0;
-
-    echo '<table border="1" cellpadding="10">';
-    echo '<tr><th>Product</th><th>Price</th><th>Qty</th><th>Subtotal</th><th>Action</th></tr>';
-
+    
     while ($row = $result->fetch_assoc()) {
-        $id = $row['id'];
-        $name = htmlspecialchars($row['name']);
-        $price = $row['price'];
-        $qty = $_SESSION['cart'][$id];
-        $subtotal = $price * $qty;
-        $total += $subtotal;
-
-        echo "<tr>
-                <td>$name</td>
-                <td>\$" . number_format($price, 2) . "</td>
-                <td>$qty</td>
-                <td>\$" . number_format($subtotal, 2) . "</td>
-                <td><a href='cart.php?remove=$id'>Remove</a></td>
-              </tr>";
+        $row['quantity'] = $_SESSION['cart'][$row['id']];
+        $row['subtotal'] = $row['price'] * $row['quantity'];
+        $total += $row['subtotal'];
+        $cart_items[] = $row;
     }
-
-    echo "<tr><td colspan='3'><strong>Total</strong></td>
-              <td colspan='2'><strong>\$" . number_format($total, 2) . "</strong></td></tr>";
-    echo '</table>';
-
-    echo '<br><a href="checkout.php"><button>Proceed to Checkout</button></a>';
 }
 ?>
+
+<div class="cart-container">
+    <h1 class="cart-title">Shopping Cart</h1>
+    
+    <?php if (empty($cart_items)): ?>
+        <div class="empty-cart">
+            <i class='bx bx-cart'></i>
+            <p>Your cart is empty</p>
+            <a href="index.php" class="continue-shopping-btn">Continue Shopping</a>
+        </div>
+    <?php else: ?>
+        <div class="cart-content">
+            <div class="cart-items">
+                <?php foreach ($cart_items as $item): ?>
+                    <div class="cart-item">
+                        <div class="item-image">
+                            <img src="uploads/<?= htmlspecialchars($item['image']) ?>" alt="<?= htmlspecialchars($item['name']) ?>">
+                        </div>
+                        <div class="item-details">
+                            <h3 class="item-name"><?= htmlspecialchars($item['name']) ?></h3>
+                            <p class="item-price">$<?= htmlspecialchars($item['price']) ?></p>
+                        </div>
+                        <div class="item-quantity">
+                            <form method="post" class="quantity-form">
+                                <input type="hidden" name="product_id" value="<?= $item['id'] ?>">
+                                <div class="quantity-controls">
+                                    <button type="button" class="quantity-btn minus">-</button>
+                                    <input type="number" name="quantity" value="<?= $item['quantity'] ?>" min="1" max="10" class="quantity-input">
+                                    <button type="button" class="quantity-btn plus">+</button>
+                                </div>
+                                <button type="submit" name="update_cart" class="update-btn">Update</button>
+                            </form>
+                        </div>
+                        <div class="item-subtotal">
+                            $<?= number_format($item['subtotal'], 2) ?>
+                        </div>
+                        <form method="post" class="remove-form">
+                            <input type="hidden" name="product_id" value="<?= $item['id'] ?>">
+                            <button type="submit" name="remove_item" class="remove-btn">
+                                <i class='bx bx-trash'></i>
+                            </button>
+                        </form>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            
+            <div class="cart-summary">
+                <h2>Order Summary</h2>
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span>$<?= number_format($total, 2) ?></span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span>Free</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total</span>
+                    <span>$<?= number_format($total, 2) ?></span>
+                </div>
+                <a href="checkout.php" class="checkout-btn">Proceed to Checkout</a>
+                <a href="index.php" class="continue-shopping-btn">Continue Shopping</a>
+            </div>
+        </div>
+    <?php endif; ?>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const quantityInputs = document.querySelectorAll('.quantity-input');
+    const minusButtons = document.querySelectorAll('.minus');
+    const plusButtons = document.querySelectorAll('.plus');
+    
+    minusButtons.forEach((button, index) => {
+        button.addEventListener('click', () => {
+            const input = quantityInputs[index];
+            if (input.value > 1) {
+                input.value = parseInt(input.value) - 1;
+            }
+        });
+    });
+    
+    plusButtons.forEach((button, index) => {
+        button.addEventListener('click', () => {
+            const input = quantityInputs[index];
+            if (input.value < 10) {
+                input.value = parseInt(input.value) + 1;
+            }
+        });
+    });
+});
+</script>
 
 <?php include 'includes/footer.php'; ?>

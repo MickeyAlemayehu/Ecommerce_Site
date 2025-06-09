@@ -19,18 +19,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<h2>Admin Login</h2>
+<div class="admin-auth-container">
+    <h2>Admin Login</h2>
 
-<?php if ($errors): ?>
-    <div style="color:red;">
-        <?php foreach ($errors as $error) echo "<p>$error</p>"; ?>
-    </div>
-<?php endif; ?>
+    <?php if ($errors): ?>
+        <div class="admin-auth-errors">
+            <?php foreach ($errors as $error) echo "<p>$error</p>"; ?>
+        </div>
+    <?php endif; ?>
 
-<form method="post" action="login.php">
-    <label>Username:<br><input type="text" name="username" required></label><br><br>
-    <label>Password:<br><input type="password" name="password" required></label><br><br>
-    <button type="submit">Login</button>
-</form>
+    <form method="post" action="login.php" class="admin-auth-form">
+        <label>Username:
+            <input type="text" name="username" required>
+        </label>
+        <label>Password:
+            <input type="password" name="password" required>
+        </label>
+        <button type="submit">Login</button>
+    </form>
+</div>
 
-<?php include '../includes/footer.php'; ?>

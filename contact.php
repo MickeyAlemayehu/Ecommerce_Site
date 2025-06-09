@@ -1,5 +1,8 @@
-<?php 
-include "includes/header.php";
+<?php
+include 'includes/auth.php';
+include 'includes/header.php';
+
+require_login();
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {

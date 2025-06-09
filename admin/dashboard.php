@@ -8,25 +8,23 @@ $sql = "SELECT * FROM products";
 $result = $conn->query($sql);
 ?>
 
-<h2>Admin Dashboard - Products</h2>
+<div class="admin-dashboard-container">
+    <h2>Admin Dashboard - Products</h2>
+    <a href="add_product.php" class="admin-btn">Add New Product</a>
+    <table class="admin-table">
+        <tr><th>ID</th><th>Name</th><th>Price</th><th>Actions</th></tr>
+        <?php while ($row = $result->fetch_assoc()): ?>
+            <tr>
+                <td><?= $row['id'] ?></td>
+                <td><?= htmlspecialchars($row['name']) ?></td>
+                <td>$<?= $row['price'] ?></td>
+                <td>
+                    <a href="edit_product.php?id=<?= $row['id'] ?>" class="admin-action-link">Edit</a>
+                    <a href="delete_product.php?id=<?= $row['id'] ?>" class="admin-action-link delete" onclick="return confirm('Delete this product?');">Delete</a>
+                </td>
+            </tr>
+        <?php endwhile; ?>
+    </table>
+    <a href="logout.php" class="admin-btn" style="margin-top:20px;">Logout</a>
+</div>
 
-<a href="add_product.php">Add New Product</a>
-<table border="1" cellpadding="10" style="margin-top:20px;">
-    <tr><th>ID</th><th>Name</th><th>Price</th><th>Actions</th></tr>
-
-    <?php while ($row = $result->fetch_assoc()): ?>
-        <tr>
-            <td><?= $row['id'] ?></td>
-            <td><?= htmlspecialchars($row['name']) ?></td>
-            <td>$<?= $row['price'] ?></td>
-            <td>
-                <a href="edit_product.php?id=<?= $row['id'] ?>">Edit</a> |
-                <a href="delete_product.php?id=<?= $row['id'] ?>" onclick="return confirm('Delete this product?');">Delete</a>
-            </td>
-        </tr>
-    <?php endwhile; ?>
-</table>
-
-<a href="logout.php" style="margin-top:20px; display:inline-block;">Logout</a>
-
-<?php include '../includes/footer.php'; ?>

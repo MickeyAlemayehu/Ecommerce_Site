@@ -1,3 +1,11 @@
+/*
+========================================
+  Bogue Store Auth Stylesheet
+  - Login & Register Forms
+  - Error/Success Messages
+========================================
+*/
+
 .auth-container {
     max-width: 400px;
     margin: 40px auto;
@@ -91,5 +99,7 @@
     border-radius: 6px;
     margin-bottom: 20px;
     font-size: 14px;
-} 
+}
+
+/* Only keep auth-related styles. Removed nav, dashboard, and table styles. */
 

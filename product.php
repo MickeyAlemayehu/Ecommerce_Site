@@ -22,28 +22,36 @@ if ($result->num_rows == 0) {
 $product = $result->fetch_assoc();
 ?>
 
-<div style="text-align: center;">
-    <div style="display: inline-block; width: 300px; padding: 30px; vertical-align: top;">
-        <h2><?= htmlspecialchars($product['name']) ?></h2>
-        <p><?= nl2br(htmlspecialchars($product['description'])) ?></p>
+<div class="product-container">
+    <div class="product-image-section">
+        <img src="uploads/<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="product-image">
     </div>
-    <div class="product-detail" style="display: inline-block; padding: 20px;">
-        <img src="uploads/<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" width="300">
-        <p><strong>Price:</strong> $<?= htmlspecialchars($product['price']) ?></p>
-    </div>
-    <div style="display: inline-block; text-align: center; vertical-align: top; width: 250px; height: 100px; padding: 20px;">
-        <section class="product">
+    
+    <div class="product-details">
+        <h1 class="product-title"><?= htmlspecialchars($product['name']) ?></h1>
+        <div class="product-price">$<?= htmlspecialchars($product['price']) ?></div>
+        <div class="product-description">
+            <?= nl2br(htmlspecialchars($product['description'])) ?>
+        </div>
+        
+        <div class="product-actions">
             <?php if (isset($_SESSION['user_id'])): ?>
-                <form method="post" action="cart.php">
+                <form method="post" action="cart.php" class="add-to-cart-form">
+                    <div class="quantity-selector">
+                        <label for="quantity">Quantity:</label>
+                        <input type="number" id="quantity" name="quantity" value="1" min="1" max="10">
+                    </div>
                     <input type="hidden" name="product_id" value="<?= htmlspecialchars($product['id']) ?>">
-                    Quantity: <br>
-                    <input type="number" name="quantity" value="1" min="1" style="border-radius: 4px; height: 30px; text-align: center;"><br>
-                    <button id="addCart" type="submit" name="add_to_cart">Add to Cart</button><br><br>
+                    <button type="submit" name="add_to_cart" class="add-to-cart-btn">
+                        <i class='bx bx-cart-add'></i> Add to Cart
+                    </button>
                 </form>
             <?php else: ?>
-                <p><strong>Please <a href="login.php?error=login_required&redirect=product.php?id=<?= $product['id'] ?>">log in</a> to add to cart.</strong></p>
+                <div class="login-prompt">
+                    <p>Please <a href="login.php?error=login_required&redirect=product.php?id=<?= $product['id'] ?>">log in</a> to add to cart.</p>
+                </div>
             <?php endif; ?>
-        </section>
+        </div>
     </div>
 </div>
 

@@ -58,8 +58,8 @@ $result = $stmt->get_result();
             <i class='bx bx-cart'></i>
             <span class="cart-count">0</span>
         </a>
-        <a href="dashboard.php" ><i class="fa-solid fa-user fa-2xl" style="color: #a35c5c;"></i></a>
-        <a href="logout.php" class="logout">Logout</a>
+        <a href="dashboard.php" ><i class="fa-solid fa-user fa-2xl" style="color: #574747;"></i></a>
+        <button><a href="logout.php" class="logout" style="color: white;">Logout</a></button>
         </div>
     </nav>
 </header>

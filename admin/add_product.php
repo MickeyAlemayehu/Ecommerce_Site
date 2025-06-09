@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
     $description = trim($_POST['description'] ?? '');
     $price = floatval($_POST['price'] ?? 0);
-    $catergory = trim($_POST['category'] ?? '');
+    $category = trim($_POST['category'] ?? '');
 
     // Handle image upload
     if (!empty($_FILES['image']['name'])) {
@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         $stmt = $conn->prepare("INSERT INTO products (name, description, price, image, category) VALUES (?, ?, ?, ?, ?)");
         $image_name = basename($_FILES['image']['name']);
-        $stmt->bind_param("ssds", $name, $description, $price, $image_name, $category);
+        $stmt->bind_param("ssdss", $name, $description, $price, $image_name, $category);
         if ($stmt->execute()) {
             echo "<p>Product added successfully. <a href='dashboard.php'>Back to dashboard</a></p>";
         } else {
@@ -50,25 +50,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<h2>Add New Product</h2>
+<div class="edit-product-container">
+    <h2>Add New Product</h2>
 
-<?php if ($errors): ?>
-    <div style="color:red;">
-        <ul>
-            <?php foreach ($errors as $e): ?>
-                <li><?= htmlspecialchars($e) ?></li>
-            <?php endforeach; ?>
-        </ul>
-    </div>
-<?php endif; ?>
+    <?php if ($errors): ?>
+        <div class="edit-product-errors">
+            <ul>
+                <?php foreach ($errors as $e): ?>
+                    <li><?= htmlspecialchars($e) ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
 
-<form d="productForm" method="post" action="add_product.php" enctype="multipart/form-data">
-    <label>Name:<br><input type="text" name="name" required></label><br><br>
-    <label>Description:<br><textarea name="description"></textarea></label><br><br>
-    <label>Price:<br><input type="number" step="0.01" name="price" required></label><br><br>
-    <label>Category:<br><input type="text" name="category"></label><br><br>
-    <label>Image:<br><input type="file" name="image" accept="image/*" required></label><br><br>
-    <button type="submit">Add Product</button>
-</form>
+    <form id="productForm" class="edit-product-form" method="post" action="add_product.php" enctype="multipart/form-data">
+        <label>Name:
+            <input type="text" name="name" required>
+        </label>
 
-<?php include '../includes/footer.php'; ?>
+        <label>Description:
+            <textarea name="description"></textarea>
+        </label>
+
+        <label>Price:
+            <input type="number" step="0.01" name="price" required>
+        </label>
+
+        <label>Category:
+            <input type="text" name="category">
+        </label>
+
+        <label>Image:
+            <input type="file" name="image" accept="image/*" required>
+        </label>
+
+        <button type="submit">Add Product</button>
+    </form>
+</div>
+

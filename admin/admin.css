@@ -1,0 +1,310 @@
+/*
+==================================================
+  Bogue Admin Stylesheet
+  - Dashboard, Tables, Header, Footer
+  - Edit/Add Product Forms, Auth/Login
+==================================================
+*/
+
+/* ========== Dashboard & Table ========== */
+.admin-dashboard-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.08);
+}
+.admin-dashboard-container h2 {
+    font-size: 28px;
+    color: #574747;
+    margin-bottom: 30px;
+    text-align: center;
+}
+.admin-btn {
+    display: inline-block;
+    background: #574747;
+    color: #fff;
+    padding: 10px 22px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    margin-bottom: 20px;
+    transition: background 0.3s;
+}
+.admin-btn:hover {
+    background: #463838;
+}
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+.admin-table th, .admin-table td {
+    padding: 14px 10px;
+    text-align: left;
+}
+.admin-table th {
+    background: #574747;
+    color: #fff;
+    font-weight: 600;
+    font-size: 16px;
+}
+.admin-table tr:nth-child(even) {
+    background: #f8f8f8;
+}
+.admin-table tr:hover {
+    background: #f1ecec;
+}
+.admin-table td {
+    color: #333;
+    font-size: 15px;
+}
+.admin-action-link {
+    color: #1a7f37;
+    font-weight: 600;
+    text-decoration: none;
+    margin-right: 10px;
+    transition: color 0.2s;
+}
+.admin-action-link.delete {
+    color: #c62828;
+}
+.admin-action-link:hover {
+    text-decoration: underline;
+    color: #574747;
+}
+@media (max-width: 700px) {
+    .admin-dashboard-container {
+        padding: 10px;
+    }
+    .admin-table th, .admin-table td {
+        padding: 8px 4px;
+        font-size: 13px;
+    }
+    .admin-dashboard-container h2 {
+        font-size: 20px;
+    }
+}
+
+/* ========== Header ========== */
+.admin-header {
+    background: #574747;
+    color: #fff;
+    padding: 22px 0 18px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    margin-bottom: 30px;
+}
+.admin-header h1 {
+    margin: 0;
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-align: center;
+    color: #fff;
+    font-family: 'Inter', Arial, sans-serif;
+}
+.admin-header nav {
+    margin-top: 10px;
+    text-align: center;
+}
+.admin-header nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 18px;
+    font-weight: 500;
+    font-size: 1.05rem;
+    transition: color 0.2s;
+}
+.admin-header nav a:hover {
+    color: #e0e0e0;
+}
+@media (max-width: 600px) {
+    .admin-header h1 {
+        font-size: 1.3rem;
+    }
+    .admin-header nav a {
+        font-size: 0.95rem;
+        margin: 0 8px;
+    }
+}
+
+/* ========== Footer ========== */
+.admin-footer {
+    background: #574747;
+    color: #fff;
+    text-align: center;
+    padding: 18px 0 12px 0;
+    font-size: 1rem;
+    margin-top: 40px;
+    border-top: 1px solid #eee;
+    letter-spacing: 1px;
+}
+.admin-footer p {
+    margin: 0;
+    color: #fff;
+    font-weight: 500;
+    font-family: 'Inter', Arial, sans-serif;
+}
+
+/* ========== Edit/Add Product Form ========== */
+.edit-product-container {
+    max-width: 500px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.08);
+    padding: 32px 28px 28px 28px;
+}
+.edit-product-container h2 {
+    text-align: center;
+    color: #574747;
+    margin-bottom: 24px;
+    font-size: 26px;
+}
+.edit-product-form label {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
+.edit-product-form input[type="text"],
+.edit-product-form input[type="number"],
+.edit-product-form textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    margin-bottom: 18px;
+    background: #fafafa;
+    transition: border-color 0.3s;
+}
+.edit-product-form input[type="text"]:focus,
+.edit-product-form input[type="number"]:focus,
+.edit-product-form textarea:focus {
+    border-color: #574747;
+    outline: none;
+}
+.edit-product-form textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+.edit-product-form input[type="file"] {
+    margin-top: 6px;
+    margin-bottom: 18px;
+}
+.edit-product-form img {
+    display: block;
+    margin: 10px 0 18px 0;
+    max-width: 150px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+.edit-product-form button[type="submit"] {
+    background: #574747;
+    color: #fff;
+    border: none;
+    padding: 12px 0;
+    width: 100%;
+    border-radius: 6px;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+.edit-product-form button[type="submit"]:hover {
+    background: #463838;
+}
+.edit-product-errors {
+    background: #ffeaea;
+    color: #c62828;
+    border-radius: 6px;
+    padding: 12px 18px;
+    margin-bottom: 18px;
+    font-size: 15px;
+}
+@media (max-width: 600px) {
+    .edit-product-container {
+        padding: 12px 4vw;
+    }
+    .edit-product-container h2 {
+        font-size: 20px;
+    }
+}
+
+/* ========== Auth/Login ========== */
+.admin-auth-container {
+    max-width: 400px;
+    margin: 60px auto 0 auto;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.10);
+    padding: 36px 28px 28px 28px;
+}
+.admin-auth-container h2 {
+    text-align: center;
+    color: #574747;
+    margin-bottom: 24px;
+    font-size: 26px;
+}
+.admin-auth-form label {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
+.admin-auth-form input[type="text"],
+.admin-auth-form input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    margin-bottom: 18px;
+    background: #fafafa;
+    transition: border-color 0.3s;
+}
+.admin-auth-form input[type="text"]:focus,
+.admin-auth-form input[type="password"]:focus {
+    border-color: #574747;
+    outline: none;
+}
+.admin-auth-form button[type="submit"] {
+    background: #574747;
+    color: #fff;
+    border: none;
+    padding: 12px 0;
+    width: 100%;
+    border-radius: 6px;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+.admin-auth-form button[type="submit"]:hover {
+    background: #463838;
+}
+.admin-auth-errors {
+    background: #ffeaea;
+    color: #c62828;
+    border-radius: 6px;
+    padding: 12px 18px;
+    margin-bottom: 18px;
+    font-size: 15px;
+    text-align: center;
+}
+@media (max-width: 600px) {
+    .admin-auth-container {
+        padding: 12px 4vw;
+    }
+    .admin-auth-container h2 {
+        font-size: 20px;
+    }
+} 
