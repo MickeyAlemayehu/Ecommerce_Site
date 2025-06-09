@@ -176,14 +176,16 @@ nav button:hover {
   transition: transform 0.3s ease;
 }
 .product-detail {
+  border-radius: 10px;
     max-width: 600px;
     margin: 0 auto;
     text-align: center;
 }
 .product-detail img {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 20px;
+    width: max-content;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 6px;
 }
 
 .about-items {
@@ -207,4 +209,15 @@ table {
 td, th {
     padding: 10px;
     text-align: center;
+}
+#addCart{
+  background-color: rgb(237, 196, 16);
+  width: 150px;
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+}
+#addCart:hover{
+  background-color: rgb(240, 211, 79);
+  transform: scale(1.02,1.02);
 }
