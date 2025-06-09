@@ -25,13 +25,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $address = trim($_POST['address'] ?? '');
+    $card = trim($_POST['card_number']);
+    $cvv = trim($_POST['cvv']);
+    $expiry = trim($_POST['expiry']);
     
 
     // Basic validation
     if ($name === '') $errors[] = "Name is required.";
     if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = "Valid email is required.";
     if ($address === '') $errors[] = "Address is required.";
-
+    if (!ctype_digit($card) || strlen($card) !== 16 || !ctype_digit($cvv) || strlen($cvv) != 3) {
+    $errors[] = "Payment Failed. Invalid card or CVV.";
+    }
     $cart = $_SESSION['cart'];
     if (empty($cart)) {
         $errors[] = "Your cart is empty.";
@@ -52,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
         // Insert order
-        $stmt = $conn->prepare("INSERT INTO orders (user_id, total, status, customer_name, customer_email, customer_address) VALUES (?, ?, 'Pending', ?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO orders (user_id, total, status, customer_name, customer_email, customer_address) VALUES (?, ?, 'Paid', ?, ?, ?)");
         $stmt->bind_param("idsss", $user_id, $total, $name, $email, $address);
         $stmt->execute();
         $order_id = $stmt->insert_id;
@@ -109,7 +114,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label>Address:<br>
             <textarea name="address" required><?= htmlspecialchars($_POST['address'] ?? '') ?></textarea>
         </label><br><br>
-
+        <label for="">Card Number: <br>
+            <input type="text" name="card_number" placeholder="Card Number" required>
+        </label> <br><br>
+        <label for="">CVV: <br>
+            <input type="text" name="cvv" placeholder="CVV" required>
+        </label><br><br>
+        <label for="">Expiry: <br>
+            <input type="text" name="expiry" placeholder="MM/YY" required>
+        </label>  <br><br>
         <button type="submit">Place Order</button>
     </form>
 

@@ -16,10 +16,9 @@
         <a href="index.php"><h1>MyClothing</h1></a>
         <div>
         <a href="products.php">Products</a>
-        <a href="shop.html">Shop</a>
-        <a href="blog.html">Blog</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
+        <a href="blog.php">Blog</a>
+        <a href="about.php">About</a>
+        <a href="contact.php">Contact</a>
         <a href="cart.php" class="cart-icon">
             <i class='bx bx-cart'></i>
             <span class="cart-count">0</span>

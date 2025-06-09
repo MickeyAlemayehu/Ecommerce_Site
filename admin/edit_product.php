@@ -31,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
     $description = trim($_POST['description'] ?? '');
     $price = floatval($_POST['price'] ?? 0);
+    $category = trim($_POST['category'] ?? '');
 
     if ($name === '') $errors[] = "Product name is required.";
     if ($price <= 0) $errors[] = "Valid price is required.";
@@ -58,8 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($errors)) {
-        $stmt = $conn->prepare("UPDATE products SET name = ?, description = ?, price = ?, image = ? WHERE id = ?");
-        $stmt->bind_param("ssdsi", $name, $description, $price, $image_name, $id);
+        $stmt = $conn->prepare("UPDATE products SET name = ?, description = ?, price = ?, image = ?, category = ? WHERE id = ?");
+        $stmt->bind_param("ssdssi", $name, $description, $price, $image_name, $category, $id);
         if ($stmt->execute()) {
             echo "<p>Product updated successfully. <a href='dashboard.php'>Back to dashboard</a></p>";
             $stmt->close();
@@ -96,6 +97,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <label>Price:<br>
         <input type="number" step="0.01" name="price" value="<?= htmlspecialchars($_POST['price'] ?? $product['price']) ?>" required>
+    </label><br><br>
+
+    <label>Category:<br>
+        <input type="text" name="category" value="<?= htmlspecialchars($_POST['category'] ?? $product['Category']) ?>">
     </label><br><br>
 
     <label>Current Image:<br>

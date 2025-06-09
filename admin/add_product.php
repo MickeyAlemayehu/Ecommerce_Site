@@ -10,7 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
     $description = trim($_POST['description'] ?? '');
     $price = floatval($_POST['price'] ?? 0);
-    
+    $catergory = trim($_POST['category'] ?? '');
+
     // Handle image upload
     if (!empty($_FILES['image']['name'])) {
         $target_dir = "../uploads/";
@@ -36,9 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($price <= 0) $errors[] = "Valid price is required.";
 
     if (empty($errors)) {
-        $stmt = $conn->prepare("INSERT INTO products (name, description, price, image) VALUES (?, ?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO products (name, description, price, image, category) VALUES (?, ?, ?, ?, ?)");
         $image_name = basename($_FILES['image']['name']);
-        $stmt->bind_param("ssds", $name, $description, $price, $image_name);
+        $stmt->bind_param("ssds", $name, $description, $price, $image_name, $category);
         if ($stmt->execute()) {
             echo "<p>Product added successfully. <a href='dashboard.php'>Back to dashboard</a></p>";
         } else {
@@ -65,6 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <label>Name:<br><input type="text" name="name" required></label><br><br>
     <label>Description:<br><textarea name="description"></textarea></label><br><br>
     <label>Price:<br><input type="number" step="0.01" name="price" required></label><br><br>
+    <label>Category:<br><input type="text" name="category"></label><br><br>
     <label>Image:<br><input type="file" name="image" accept="image/*" required></label><br><br>
     <button type="submit">Add Product</button>
 </form>
