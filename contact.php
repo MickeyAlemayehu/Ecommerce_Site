@@ -1,4 +1,12 @@
-<?php include "includes/header.php";?>
+<?php 
+include "includes/header.php";
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php?error=login_required");
+    exit;
+}
+?>
 <section class="contact-page">
     <h1>📞 Contact Us</h1>
     <p>Have questions, feedback, or need help? We'd love to hear from you. Reach out to us through the form below or use the contact info provided.</p>

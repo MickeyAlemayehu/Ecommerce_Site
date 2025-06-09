@@ -1,4 +1,35 @@
-// scripts.js
+document.addEventListener("DOMContentLoaded", () => {
+const cartIcon = document.querySelector('.cart-icon');
+const cartCountElement = document.querySelector('.cart-count');
+const shopNowButtons = document.querySelectorAll(".product button");
+let cartCount = parseInt(localStorage.getItem("cartCount")) || 0;
+let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+updateCartUI();
+shopNowButtons.forEach(button => {
+  button.addEventListener("click", () => {
+    const productDiv = button.closest(".product");
+    const name = productDiv.querySelector("h3").textContent;
+    const description = productDiv.querySelector("p").textContent;
+    const price = parseFloat(productDiv.dataset.price);
+    const image = productDiv.querySelector("img").src;
+
+    const productData = { name, description, price, image };
+    cartItems.push(productData);
+
+    cartCount++;
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    localStorage.setItem("cartCount", cartCount);
+    updateCartUI();
+
+    alert("🛒 Item added to cart!");
+  });
+});
+function updateCartUI() {
+    if (cartCountElement) {
+      cartCountElement.textContent = cartCount;
+    }
+  }
+});
 
 // Validate email format
 function isValidEmail(email) {
@@ -124,3 +155,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+

@@ -1,8 +1,10 @@
+<?php include 'includes/db.php'; ?>
 <?php include 'includes/header.php'; ?>
+
  <div class="about-page">
     <h2>🛒 About Us</h2> 
     <p>
-      Welcome to our online shopping platform — a modern, user-friendly website created with passion, purpose, and innovation by a team of five Computer Science students.
+      Welcome to our online shopping platform — a modern, user-friendly website created with passion, purpose, and innovation by a team of six Computer Science students.
     </p>
 
     <p>
@@ -18,13 +20,13 @@
     <h3>Meet the Team:</h3>
 
     <div class="team-section">
-      <div class="team-member">1.m</div>
-      <div class="team-member">2.b</div>
-      <div class="team-member">3. c</div>
-      <div class="team-member">4. d</div>
-      <div class="team-member">5. f</div>
+      <div class="team-member">1.Michael Alemayehu</div>
+      <div class="team-member">2.Rakeb Tilahun</div>
+      <div class="team-member">3.Tinbite Yonas</div>
+      <div class="team-member">4.Neshwa Sany</div>
+      <div class="team-member">5.Mekdelawit Emiru</div>
+      <div class="team-member">6.Melat Getachew</div>
     </div>
   </div>
 
-</body>
-</html>
+<?php include 'includes/footer.php'; ?>

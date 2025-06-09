@@ -14,3 +14,108 @@ nav a {
     margin: 0 10px;
     text-decoration: none;
 }
+
+/* Container Style */
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #fff7ef; /* light beige */
+    border: 1px solid #e0d4c2;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(110, 75, 42, 0.1);
+}
+
+/* Form Styles */
+form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+form input[type="text"],
+form input[type="number"],
+form input[type="file"],
+form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #bfa98b;
+    border-radius: 5px;
+    background-color: #fffdf9;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    font-size: 1em;
+}
+
+form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+button {
+    background-color: #8b5e3c; /* darker brown */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background-color: #734829;
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th,
+table td {
+    border: 1px solid #9e8769; 
+    padding: 10px;
+    text-align: left;
+}
+
+table th {
+    background-color: #a07854;
+    color: white;
+}
+
+table tr:nth-child(even) {
+    background-color: #f3e8db;
+}
+
+/* Links */
+a {
+    color: #6e4b2a;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Error Box */
+.error-box {
+    background-color: #fff0eb;
+    color: #a94442;
+    border: 1px solid #e0b4b4;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+/* Logout link or bottom links */
+.bottom-link {
+    display: inline-block;
+    margin-top: 30px;
+    color: #8b5e3c;
+}
+
+

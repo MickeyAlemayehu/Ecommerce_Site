@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 include 'includes/db.php';
 include 'includes/header.php';
 
@@ -25,7 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Login success
                 $_SESSION['user_id'] = $user_id;
                 $_SESSION['username'] = $username;
-                header('Location: index.php');
+                
+                // Redirect to the page they were trying to access, or index
+                $redirect = $_GET['redirect'] ?? 'index.php';
+                header("Location: $redirect");
                 exit;
             } else {
                 $errors[] = "Invalid username or password.";
@@ -38,30 +41,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<h2>Login</h2>
+<div class="auth-container">
+    <h2>Welcome Back</h2>
 
-<?php if ($errors): ?>
-    <div style="color:red;">
-        <ul>
-            <?php foreach ($errors as $error): ?>
-                <li><?= htmlspecialchars($error) ?></li>
-            <?php endforeach; ?>
-        </ul>
+    <?php if ($errors): ?>
+        <div class="error-message">
+            <ul style="margin: 0; padding-left: 20px;">
+                <?php foreach ($errors as $error): ?>
+                    <li><?= htmlspecialchars($error) ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
+
+    <form id="loginForm" method="post" action="login.php" class="auth-form">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <div class="auth-links">
+        <p>Don't have an account? <a href="register.php">Register here</a></p>
     </div>
-<?php endif; ?>
-
-<form id="loginForm" method="post" action="login.php">
-    <label>Username:<br>
-        <input type="text" name="username" required>
-    </label><br><br>
-
-    <label>Password:<br>
-        <input type="password" name="password" required>
-    </label><br><br>
-
-    <button type="submit">Login</button>
-</form>
-
-<p>Don't have an account? <a href="register.php">Register here</a>.</p>
+</div>
 
 <?php include 'includes/footer.php'; ?>

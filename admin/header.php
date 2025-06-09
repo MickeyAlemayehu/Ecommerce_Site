@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Clothing Store</title>
+    <title>Bogue Store</title>
     <link rel="stylesheet" href="style.css">
     <script src="/js/scripts.js"></script>
 </head>
 <body>
 <header>
-    <h1>My Clothing Store</h1>
+    <h1>Bogue</h1>
     <nav>
     </nav>
 </header>

@@ -1,7 +1,13 @@
 <?php
-session_start();
+
 include 'includes/db.php';
 include 'includes/header.php';
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php?error=login_required");
+    exit;
+}
 
 // Initialize cart if not set
 if (!isset($_SESSION['cart'])) {
@@ -19,15 +25,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
         $_SESSION['cart'][$id] = $qty;
     }
 
-    echo "<p>Product added to cart.</p>";
+    // Redirect to avoid form resubmission
+    header("Location: cart.php?added=1");
+    exit;
 }
 
 // Handle remove item
 if (isset($_GET['remove'])) {
     $removeId = intval($_GET['remove']);
     unset($_SESSION['cart'][$removeId]);
-    echo "<p>Item removed from cart.</p>";
+    header("Location: cart.php?removed=1");
+    exit;
 }
+
+// Count items in cart
+$cartCount = isset($_SESSION['cart']) ? array_sum($_SESSION['cart']) : 0;
+?>
+
+<?php
+if (isset($_GET['added'])) {
+    echo "<p style='color: green;'>✅ Product added to cart!</p>";
+} elseif (isset($_GET['removed'])) {
+    echo "<p style='color: orange;'>🗑️ Item removed from cart.</p>";
+}
+
+// Display cart contents
 if (empty($_SESSION['cart'])) {
     echo "<p>Your cart is empty.</p>";
 } else {
@@ -50,15 +72,17 @@ if (empty($_SESSION['cart'])) {
 
         echo "<tr>
                 <td>$name</td>
-                <td>\$$price</td>
+                <td>\$" . number_format($price, 2) . "</td>
                 <td>$qty</td>
-                <td>\$$subtotal</td>
+                <td>\$" . number_format($subtotal, 2) . "</td>
                 <td><a href='cart.php?remove=$id'>Remove</a></td>
               </tr>";
     }
 
-    echo "<tr><td colspan='3'><strong>Total</strong></td><td colspan='2'><strong>\$$total</strong></td></tr>";
+    echo "<tr><td colspan='3'><strong>Total</strong></td>
+              <td colspan='2'><strong>\$" . number_format($total, 2) . "</strong></td></tr>";
     echo '</table>';
+
     echo '<br><a href="checkout.php"><button>Proceed to Checkout</button></a>';
 }
 ?>

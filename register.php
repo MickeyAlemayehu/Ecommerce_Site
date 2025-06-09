@@ -1,5 +1,4 @@
 <?php
-session_start();
 include 'includes/db.php';
 include 'includes/header.php';
 
@@ -43,40 +42,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<h2>Register</h2>
+<div class="auth-container">
+    <h2>Create Account</h2>
 
-<?php if ($success): ?>
-    <p>Registration successful! <a href="login.php">Login here</a>.</p>
-<?php else: ?>
-    <?php if ($errors): ?>
-        <div style="color:red;">
-            <ul>
-                <?php foreach ($errors as $error): ?>
-                    <li><?= htmlspecialchars($error) ?></li>
-                <?php endforeach; ?>
-            </ul>
+    <?php if ($success): ?>
+        <div class="success-message">
+            <p>Registration successful! <a href="login.php">Login here</a>.</p>
+        </div>
+    <?php else: ?>
+        <?php if ($errors): ?>
+            <div class="error-message">
+                <ul style="margin: 0; padding-left: 20px;">
+                    <?php foreach ($errors as $error): ?>
+                        <li><?= htmlspecialchars($error) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+
+        <form id="registerForm" method="post" action="register.php" class="auth-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" value="<?= htmlspecialchars($_POST['username'] ?? '') ?>" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+
+            <button type="submit">Register</button>
+        </form>
+
+        <div class="auth-links">
+            <p>Already have an account? <a href="login.php">Login here</a></p>
         </div>
     <?php endif; ?>
-
-    <form id="registerForm" method="post" action="register.php">
-        <label>Username:<br>
-            <input type="text" name="username" value="<?= htmlspecialchars($_POST['username'] ?? '') ?>" required>
-        </label><br><br>
-
-        <label>Email:<br>
-            <input type="email" name="email" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>" required>
-        </label><br><br>
-
-        <label>Password:<br>
-            <input type="password" name="password" required>
-        </label><br><br>
-
-        <label>Confirm Password:<br>
-            <input type="password" name="confirm_password" required>
-        </label><br><br>
-
-        <button type="submit">Register</button>
-    </form>
-<?php endif; ?>
+</div>
 
 <?php include 'includes/footer.php'; ?>
