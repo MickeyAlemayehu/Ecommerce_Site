@@ -46,12 +46,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $expiry = trim($_POST['expiry']);
 
     // Basic validation
-    if ($name === '') $errors[] = "Name is required.";
+    /*if ($name === '') $errors[] = "Name is required.";
     if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = "Valid email is required.";
     if ($address === '') $errors[] = "Address is required.";
     if (!ctype_digit($card) || strlen($card) !== 16 || !ctype_digit($cvv) || strlen($cvv) != 3) {
         $errors[] = "Payment Failed. Invalid card or CVV.";
-    }
+    }*/
     $cart = $_SESSION['cart'];
     if (empty($cart)) {
         $errors[] = "Your cart is empty.";
@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </ul>
                     </div>
                 <?php endif; ?>
-                <form method="post">
+                <form method="post" id="checkoutForm">
                     <div class="form-section">
                         <h2>Customer Information</h2>
                         <div class="form-group">

@@ -11,10 +11,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     $confirm_password = $_POST['confirm_password'] ?? '';
 
-    if ($username === '') $errors[] = "Username is required.";
+    /*if ($username === '') $errors[] = "Username is required.";
     if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = "Valid email is required.";
     if (strlen($password) < 6) $errors[] = "Password must be at least 6 characters.";
-    if ($password !== $confirm_password) $errors[] = "Passwords do not match.";
+    if ($password !== $confirm_password) $errors[] = "Passwords do not match.";*/
 
     if (empty($errors)) {
         // Check if username or email exists

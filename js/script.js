@@ -1,56 +1,51 @@
 document.addEventListener("DOMContentLoaded", () => {
-const cartIcon = document.querySelector('.cart-icon');
-const cartCountElement = document.querySelector('.cart-count');
-const shopNowButtons = document.querySelectorAll(".product button");
-let cartCount = parseInt(localStorage.getItem("cartCount")) || 0;
-let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-updateCartUI();
-shopNowButtons.forEach(button => {
-  button.addEventListener("click", () => {
-    const productDiv = button.closest(".product");
-    const name = productDiv.querySelector("h3").textContent;
-    const description = productDiv.querySelector("p").textContent;
-    const price = parseFloat(productDiv.dataset.price);
-    const image = productDiv.querySelector("img").src;
+  // ---------------------- Cart Logic ----------------------
+  const cartIcon = document.querySelector('.cart-icon');
+  const cartCountElement = document.querySelector('.cart-count');
+  const shopNowButtons = document.querySelectorAll(".product button");
+  let cartCount = parseInt(localStorage.getItem("cartCount")) || 0;
+  let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
 
-    const productData = { name, description, price, image };
-    cartItems.push(productData);
-
-    cartCount++;
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
-    localStorage.setItem("cartCount", cartCount);
-    updateCartUI();
-
-    alert("🛒 Item added to cart!");
-  });
-});
-function updateCartUI() {
+  function updateCartUI() {
     if (cartCountElement) {
       cartCountElement.textContent = cartCount;
     }
   }
-});
 
-// Validate email format
-function isValidEmail(email) {
-  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return regex.test(email);
-}
+  updateCartUI();
 
-// Validate password strength (min 8 chars, at least one uppercase, one lowercase, one digit)
-function isStrongPassword(password) {
-  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-  return regex.test(password);
-}
+  shopNowButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      const productDiv = button.closest(".product");
+      const name = productDiv.querySelector("h3").textContent;
+      const description = productDiv.querySelector("p").textContent;
+      const price = parseFloat(productDiv.dataset.price);
+      const image = productDiv.querySelector("img").src;
 
-// Validate username (only letters, numbers, underscores, 3-15 chars)
-function isValidUsername(username) {
-  const regex = /^[a-zA-Z0-9_]{3,15}$/;
-  return regex.test(username);
-}
+      const productData = { name, description, price, image };
+      cartItems.push(productData);
+      cartCount++;
 
-// Form validation example for registration form
-document.addEventListener('DOMContentLoaded', () => {
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+      localStorage.setItem("cartCount", cartCount);
+      updateCartUI();
+
+      alert("🛒 Item added to cart!");
+    });
+  });
+
+  function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  function isStrongPassword(password) {
+    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password);
+  }
+
+  function isValidUsername(username) {
+    return /^[a-zA-Z0-9_]{3,15}$/.test(username);
+  }
+
   const regForm = document.getElementById('registerForm');
   if (regForm) {
     regForm.addEventListener('submit', (e) => {
@@ -58,8 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const password = regForm.password.value;
       const confirmPassword = regForm.confirm_password.value;
       const username = regForm.username.value.trim();
-
-      let errors = [];
+      const errors = [];
 
       if (!isValidEmail(email)) errors.push('Invalid email format.');
       if (!isValidUsername(username)) errors.push('Username must be 3-15 characters: letters, numbers, underscores only.');
@@ -68,31 +62,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (errors.length > 0) {
         alert(errors.join('\n'));
-        e.preventDefault(); // prevent form submission
+        e.preventDefault();
       }
     });
   }
-});
 
-// Dynamic UI example: toggle mobile nav menu
-document.addEventListener('DOMContentLoaded', () => {
-  const menuBtn = document.getElementById('menuToggle');
-  const nav = document.querySelector('nav');
-
-  if (menuBtn && nav) {
-    menuBtn.addEventListener('click', () => {
-      nav.classList.toggle('open');
-    });
-  }
-});
-document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('loginForm');
   if (loginForm) {
     loginForm.addEventListener('submit', (e) => {
       const email = loginForm.email.value.trim();
       const password = loginForm.password.value;
-
-      let errors = [];
+      const errors = [];
 
       if (!isValidEmail(email)) errors.push('Please enter a valid email.');
       if (password.length === 0) errors.push('Please enter your password.');
@@ -103,49 +83,37 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-});
 
-document.addEventListener('DOMContentLoaded', () => {
   const checkoutForm = document.getElementById('checkoutForm');
   if (checkoutForm) {
     checkoutForm.addEventListener('submit', (e) => {
       const name = checkoutForm.name.value.trim();
+      const email = checkoutForm.email.value.trim();
       const address = checkoutForm.address.value.trim();
-      const city = checkoutForm.city.value.trim();
-      const zip = checkoutForm.zip.value.trim();
-      const phone = checkoutForm.phone.value.trim();
+      const cardNumber = checkoutForm.card_number.value.trim();
+      const cvv = checkoutForm.cvv.value.trim();
+      const expiry = checkoutForm.expiry.value.trim();
 
-      let errors = [];
+      const nameRegex = /^[a-zA-Z\s]{2,50}$/;
+      const cardRegex = /^\d{16}$/;
+      const cvvRegex = /^\d{3}$/;
+      const expiryRegex = /^(0[1-9]|1[0-2])\/\d{2}$/;
 
-      if (name.length < 2) errors.push('Please enter a valid name.');
-      if (address.length < 5) errors.push('Please enter a valid address.');
-      if (city.length < 2) errors.push('Please enter a valid city.');
-      if (!/^\d{5}(-\d{4})?$/.test(zip)) errors.push('Please enter a valid ZIP code.');
-      if (!/^\+?\d{7,15}$/.test(phone)) errors.push('Please enter a valid phone number.');
+      const errors = [];
 
-      if (errors.length > 0) {
-        alert(errors.join('\n'));
-        e.preventDefault();
-      }
-    });
-  }
-});
-document.addEventListener('DOMContentLoaded', () => {
-  const productForm = document.getElementById('productForm');
-  if (productForm) {
-    productForm.addEventListener('submit', (e) => {
-      const name = productForm.name.value.trim();
-      const price = parseFloat(productForm.price.value);
-      const image = productForm.querySelector('input[name="image"]');
-
-      let errors = [];
-
-      if (name.length < 3) errors.push('Product name must be at least 3 characters.');
-      if (isNaN(price) || price <= 0) errors.push('Please enter a valid price.');
-
-      // Check for image only if it is a new product or image input is not empty
-      if (image && image.required && image.files.length === 0) {
-        errors.push('Please upload a product image.');
+      if (!nameRegex.test(name)) errors.push("Name must be 2–50 letters and spaces only.");
+      if (!isValidEmail(email)) errors.push('Please enter a valid email.');
+      if (address.length < 5) errors.push("Address must be at least 5 characters.");
+      if (!cardRegex.test(cardNumber)) errors.push("Card number must be 16 digits.");
+      if (!cvvRegex.test(cvv)) errors.push("CVV must be 3 digits.");
+      if (!expiryRegex.test(expiry)) {
+        errors.push("Expiry must be in MM/YY format.");
+      } else {
+        const [month, year] = expiry.split('/');
+        const expiryDate = new Date(`20${year}`, month);
+        const now = new Date();
+        now.setDate(1);
+        if (expiryDate < now) errors.push("Card expiry must be in the future.");
       }
 
       if (errors.length > 0) {
@@ -155,4 +123,3 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
-
