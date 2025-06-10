@@ -5,16 +5,16 @@
 
 <div class="product-grid">
     <?php
-    $sql = "SELECT * FROM products where category = 'shoe'";
+    $sql = "SELECT * FROM products where category = 'Shoe'";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0):
         while ($row = $result->fetch_assoc()):
     ?>
     <div class="product-card">
-        <img src="uploads/<?= htmlspecialchars($row['image']) ?>" alt="<?= htmlspecialchars($row['name']) ?>">
+        <a href="product.php?id=<?= $row['id'] ?>" style="text-decoration: none; color: black" ><img src="uploads/<?= htmlspecialchars($row['image']) ?>" alt="<?= htmlspecialchars($row['name']) ?>">
         <h3><?= htmlspecialchars($row['name']) ?></h3>
-        <p>$<?= htmlspecialchars($row['price']) ?></p>
+        <p>$<?= htmlspecialchars($row['price']) ?></p></a>
         <a href="product.php?id=<?= $row['id'] ?>">View Details</a>
     </div>
     <?php endwhile; else: ?>

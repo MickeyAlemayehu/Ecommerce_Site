@@ -1,6 +1,10 @@
 <?php
 session_start();
-$cartCount = isset($_SESSION['cart']) ? array_sum($_SESSION['cart']) : 0;
+// Initialize cart if it doesn't exist
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
+}
+$cartCount = count($_SESSION['cart']);
 ?>
 <!DOCTYPE html>
 <html>

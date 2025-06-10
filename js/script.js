@@ -1,36 +1,37 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // ---------------------- Cart Logic ----------------------
   const cartIcon = document.querySelector('.cart-icon');
   const cartCountElement = document.querySelector('.cart-count');
   const shopNowButtons = document.querySelectorAll(".product button");
-  let cartCount = parseInt(localStorage.getItem("cartCount")) || 0;
-  let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-
-  function updateCartUI() {
-    if (cartCountElement) {
-      cartCountElement.textContent = cartCount;
-    }
-  }
-
-  updateCartUI();
 
   shopNowButtons.forEach(button => {
-    button.addEventListener("click", () => {
+    button.addEventListener("click", async () => {
       const productDiv = button.closest(".product");
       const name = productDiv.querySelector("h3").textContent;
-      const description = productDiv.querySelector("p").textContent;
       const price = parseFloat(productDiv.dataset.price);
       const image = productDiv.querySelector("img").src;
 
-      const productData = { name, description, price, image };
-      cartItems.push(productData);
-      cartCount++;
+      try {
+        const response = await fetch('add_to_cart.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: `name=${encodeURIComponent(name)}&price=${price}&image=${encodeURIComponent(image)}`
+        });
 
-      localStorage.setItem("cartItems", JSON.stringify(cartItems));
-      localStorage.setItem("cartCount", cartCount);
-      updateCartUI();
-
-      alert("🛒 Item added to cart!");
+        const data = await response.json();
+        if (data.success) {
+          if (cartCountElement) {
+            cartCountElement.textContent = data.cart_count;
+          }
+          alert("🛒 Item added to cart!");
+        } else {
+          alert("Failed to add item to cart");
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert("Error adding item to cart");
+      }
     });
   });
 
